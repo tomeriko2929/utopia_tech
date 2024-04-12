@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: myapp.local
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/frontend(/|$)(.*)"
+        backend:
+          service:
+            name: kubernetes
+            port:
+              number: 443
+      - pathType: Prefix
+        path: "/backend(/|$)(.*)"
+        backend:
+          service:
+            name: my-release-my-chart
+            port:
+              number: 80
+
+     
